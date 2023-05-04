@@ -1,0 +1,5 @@
+PENGGUNAAN APLIKASI
+1. Saya Membuat daftar Transaksi
+2. Lalu saya mengakumulasi poinnya sesuai dengan soal yang di kasih
+3. menampilkan sebuah daftar report nasabah yang sudah di print
+4. klik button detail pada daftar report nasabah dan akan direct link ke report page di mana saya set menggunakan id tb_report

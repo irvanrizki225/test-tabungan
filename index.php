@@ -148,54 +148,31 @@ foreach ($result_transaction as $row_transaction) {
         <table class="table table-striped">
             <thead>
                 <tr align="center">
-                    <th>Transaction Date</th>
-                    <th>Description</th>
-                    <th>Credit</th>
-                    <th>Debit</th>
-                    <th>Amount</th>
+                    <th>AccountId</th>
+                    <th>StartDate</th>
+                    <th>EndDate</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                if (isset($_POST['submit'])) {
-                    $nasabah = $_POST['nasabah'];
-                    $start_date = $_POST['start_date'];
-                    $end_date = $_POST['end_date'];
-                    $result_report = $con->query("SELECT * FROM tb_transactions WHERE AccountId = '$nasabah' AND date(TransactionDate) BETWEEN '$start_date' AND '$end_date'") or die($con->error);
+                $sql_report = "select * from tb_report";
+                $result_report = $con->query($sql_report);
 
-                    foreach ($result_report as $key => $value) {
-                        if ($value['DebitCreditStatus'] == 'D') {
-                            $data[] = [
-                                'TransactionDate' => $value['TransactionDate'],
-                                'Description' => $value['Description'],
-                                'Credit' => '-',
-                                'Debit' => 'Debit',
-                                'Amount' => $value['Amount']
-                            ];
-                        }else {
-                            $data[] = [
-                                'TransactionDate' => $value['TransactionDate'],
-                                'Description' => $value['Description'],
-                                'Credit' => 'Credit',
-                                'Debit' => '-',
-                                'Amount' => $value['Amount']
-                            ];
-                        }
-                    }
-                    // var_dump($data);
-
-
-                    foreach ($data as $row) {
-                        ?>
-                    <tr align="center">
-                        <td><?php echo date('d-m-Y', strtotime($row['TransactionDate']))?></td>
-                        <td><?php echo $row['Description']?></td>
-                        <td><?php echo $row['Credit']?></td>
-                        <td><?php echo $row['Debit']?></td>
-                        <td><?php echo $row['Amount']?></td>
-                    </tr>
-                    <?php
-                    }
+                foreach ($result_report as $row) {
+                ?>
+                <tr align="center">
+                    <td><?php echo $row['AccountId']?></td>
+                    <td><?php echo $row['StartDate']?></td>
+                    <td><?php echo $row['EndDate']?></td>
+                    <td>
+                        <a href="report.php?id=<?php echo $row['id']?>" class="btn btn-primary">
+                            Detail
+                        </a>
+                    </td>
+                </tr>
+                
+                <?php
                 }
                 ?>
             </tbody>
@@ -203,9 +180,27 @@ foreach ($result_transaction as $row_transaction) {
     </div>
 </div>
 
-
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
+
+<?php
+if (isset($_POST['submit'])) {
+    $nasabah = $_POST['nasabah'];
+    $start_date = $_POST['start_date'];
+    $end_date = $_POST['end_date'];
+    $sql = "INSERT INTO tb_report (AccountId, StartDate, EndDate) VALUES ('$nasabah', '$start_date', '$end_date')";
+    $query = mysqli_query($con, $sql);
+    if ($query) {
+        echo "<script>alert('Berhasil')</script>";
+    }else{
+        echo "<script>alert('Gagal')</script>";
+    }
+}
+
+
+    ?>
+
+
+
+    
